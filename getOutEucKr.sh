@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 repositoryPath=$1
+fileType=$2
 
 echo $repositoryPath
 # Check Validation
@@ -10,6 +11,11 @@ then
   exit -1
 fi
 
+# split extension
+for ex in ${fileType/,/ } ;
+do
+  echo ex
+done
 
 # get List of repository files
 javaList=`find $repositoryPath -name \*.java -printf "%h/%f\n"`
@@ -24,6 +30,7 @@ else
   for i in $javaList:
   do
     filePath=${i/.java\:/.java}
+    ISEUC=checkEuc filePath
     iconv -c -f euc-kr -t utf-8 $filePath > $filePath.tmp && mv $filePath.tmp $filePath
     echo $filePath
   done
@@ -66,3 +73,12 @@ else
     echo $filePath
   done
 fi
+
+function checkEuc() {
+  if [[ "$1" == *EUC* ]];
+  then 
+    return true
+  else
+    return false
+  fi
+}
