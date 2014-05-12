@@ -4,6 +4,15 @@
 repositoryPath=$1
 excludeFileType=$2
 
+#help message
+function echoHelp {
+  if [ "$repositoryPath" == "--help" ];
+  then
+    echo "--dirpath={directory path to change encoding scheme} : specify absolute directory path to change encoding scheme."
+    echo "--ext={file extenstion to exclude} : specify extention to exclude"
+  fi
+}
+
 #validation function
 function checkEssentiallibrary {
   existIconv=$(which iconv | wc -l)
@@ -49,12 +58,14 @@ function validArgument {
 function translateCharacterEncoding {
   for filePath in "$repositoryPath"/*
   do
+    encodingScheme=$(file -bi $filePath | awk '{print $2}')
     iconv -c -f euc-kr -t utf-8 $filePath > $filePath.tmp
     mv $filePath.tmp $filePath
   done
 }
 
 #check validation of arguments
+echoHelp()
 validArgument()
 
 # announce target direcotry 
