@@ -58,7 +58,8 @@ function validArgument {
 function translateCharacterEncoding {
   for filePath in "$repositoryPath"/*
   do
-    encodingScheme=$(file -bi $filePath | awk '{print $2}')
+    #encodingScheme=$(file -bi $filePath | awk '{print $2}')
+    encodingScheme=$(file -bi $filePath | cut -d '=' -f2)
     iconv -c -f euc-kr -t utf-8 $filePath > $filePath.tmp
     mv $filePath.tmp $filePath
   done
