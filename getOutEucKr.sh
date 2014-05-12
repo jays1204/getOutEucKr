@@ -33,7 +33,7 @@ function checkValidDirectory {
 
   if [ -d $repositoryPath ];
   then
-    
+    echo ""
   else
     echo "$repositoryPath is not directory or not exist."
     exit -1
@@ -41,35 +41,45 @@ function checkValidDirectory {
 }
 
 function isFileInDirectory {
-  fileCount=$(ls | wc -l)
+  fileCount=$(ls $repositoryPath | wc -l)
+
   if [ $fileCount =< 1 ];
   then
     echo "No file In $repositoryPath"
+    echo "File Count is $fileCount"
     exit -1
   fi
 }
 
 function validArgument {
-  checkEssentiallibrary()
-  checkValidDirectory()
-  isFileInDirectory()
+  checkEssentiallibrary
+  checkValidDirectory
+  isFileInDirectory
 }
 
-function translateCharacterEncoding {
-  for filePath in "$repositoryPath"/*
+function convertCharacterEncoding {
+#recursive neeeded! 
+  fileList=`find $repositoryPath -name \*.* -printf "%h/%f\n"`:
+  
+  for filePath in $fileList
+  #for filePath in "$repositoryPath"/*
   do
-    #encodingScheme=$(file -bi $filePath | awk '{print $2}')
     encodingScheme=$(file -bi $filePath | cut -d '=' -f2)
-    iconv -c -f euc-kr -t utf-8 $filePath > $filePath.tmp
-    mv $filePath.tmp $filePath
+
+    if [ "$encodingScheme" != "utf-8" ] && [ "$encodingScheme" != "binary" ] && [ "$filePath" != */.* ];
+    then
+      echo "fileName : $filePath , encSchem : $encodingScheme"
+      iconv -c -f $encodingScheme -t utf-8 $filePath > $filePath.tmp
+      mv $filePath.tmp $filePath
+    fi
   done
 }
 
 #check validation of arguments
-echoHelp()
-validArgument()
+echoHelp
+validArgument
 
 # announce target direcotry 
 echo "$repositoryPath directory is targeted on change character encoding"
 
-translateCharacterEncoding()
+convertCharacterEncoding
