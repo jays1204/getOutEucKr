@@ -8,8 +8,7 @@ excludeFileType=$2
 function echoHelp {
   if [ "$repositoryPath" == "--help" ];
   then
-    echo "--dirpath={directory path to change encoding scheme} : specify absolute directory path to change encoding scheme."
-    echo "--ext={file extenstion to exclude} : specify extention to exclude"
+    echo "{directory path to change encoding scheme} : specify absolute directory path to change encoding scheme."
   fi
 }
 
