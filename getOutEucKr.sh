@@ -91,7 +91,7 @@ function convertCharacterEncoding () {
     if [ "$encodingScheme" == "iso-8859-1" ];
     then
       echo "fileName : $filePath , encSchem : $encodingScheme" >> ./result.txt
-      iconv -c -f $encodingScheme -t utf-8 $filePath > $filePath.tmp
+      iconv -c -f euc-kr -t utf-8 $filePath > $filePath.tmp
       mv $filePath.tmp $filePath
     fi
   done
