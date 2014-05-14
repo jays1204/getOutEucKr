@@ -89,7 +89,7 @@ function convertCharacterEncoding () {
   do
     encodingScheme=$(file -bi $filePath | cut -d '=' -f2)
 
-    if [ "$encodingScheme" != "utf-8" ] && [ "$encodingScheme" != "binary" ];
+    if [ "$encodingScheme" == "iso-8859-1" ];
     then
       echo "fileName : $filePath , encSchem : $encodingScheme" >> ./result.txt
       iconv -c -f $encodingScheme -t utf-8 $filePath > $filePath.tmp
