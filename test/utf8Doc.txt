@@ -1,0 +1,2 @@
+This document is based on UTF-8.
+이 문서는 UTF-8로 만들어졌습니다.
