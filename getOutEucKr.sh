@@ -13,6 +13,14 @@ function echoHelp {
   fi
 }
 
+function runTest {
+  if [ "$repositoryPath" == "runTest" ];
+    then 
+      checkEssentiallibrary
+      convertCharacterEncoding "runTest"
+  fi
+}
+
 #validation function
 function checkEssentiallibrary {
   existIconv=$(which iconv | wc -l)
@@ -63,19 +71,24 @@ function backupOriginal {
   echo "original backup tar file is craeted on $HOME/convertBak.tar"
 }
 
-function convertCharacterEncoding {
-  backupOriginal
-#recursive neeeded! 
-  fileList=`find $repositoryPath -name \*.* -printf "%h/%f\n"`:
+function convertCharacterEncoding () {
+  if [ "$1" == "runTest" ];
+    then
+      targetPath=$(pwd)
+    else
+      backupOriginal
+      targetPath=$1
+  fi
+  
+  fileList=`find $targetPath -name \*.* -printf "%h/%f\n"`:
   
   for filePath in $fileList
-  #for filePath in "$repositoryPath"/*
   do
     encodingScheme=$(file -bi $filePath | cut -d '=' -f2)
 
-    if [ "$encodingScheme" != "utf-8" ] && [ "$encodingScheme" != "binary" ] && [ "$filePath" != */.* ];
+    if [ "$encodingScheme" != "utf-8" ] && [ "$encodingScheme" != "binary" ];
     then
-      echo "fileName : $filePath , encSchem : $encodingScheme"
+      echo "fileName : $filePath , encSchem : $encodingScheme" >> ./result.txt
       iconv -c -f $encodingScheme -t utf-8 $filePath > $filePath.tmp
       mv $filePath.tmp $filePath
     fi
@@ -84,9 +97,10 @@ function convertCharacterEncoding {
 
 #check validation of arguments
 echoHelp
+runTest
 validArgument
 
 # announce target direcotry 
 echo "$repositoryPath directory is targeted on change character encoding"
 
-convertCharacterEncoding
+convertCharacterEncoding $repositoryPath
