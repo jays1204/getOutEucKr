@@ -1,0 +1,2 @@
+This Document is based on euc-kr.
+이 문서는 EUC-KR로 작성되었습니다. 
