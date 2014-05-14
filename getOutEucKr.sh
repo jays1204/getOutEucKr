@@ -57,7 +57,14 @@ function validArgument {
   isFileInDirectory
 }
 
+function backupOriginal {
+  tar cvf $HOME/convertBak.tar $repositoryPath
+  
+  echo "original backup tar file is craeted on $HOME/convertBak.tar"
+}
+
 function convertCharacterEncoding {
+  backupOriginal
 #recursive neeeded! 
   fileList=`find $repositoryPath -name \*.* -printf "%h/%f\n"`:
   
