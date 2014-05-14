@@ -43,7 +43,10 @@ function checkValidDirectory {
   then
     echo ""
   else
-    echo "$repositoryPath is not directory or not exist."
+    if [ "$repositoryPath" != "--help" ];
+    then
+      echo "$repositoryPath is not directory or not exist."
+    fi
     exit -1
   fi
 }
